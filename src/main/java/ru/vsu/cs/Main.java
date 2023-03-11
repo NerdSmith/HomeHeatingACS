@@ -1,6 +1,6 @@
 package ru.vsu.cs;
 
-import ru.vsu.cs.daos.BoilerDao;
+import ru.vsu.cs.daos.DaoCsv.BoilerDao;
 import ru.vsu.cs.models.*;
 import ru.vsu.cs.utils.IdGenerator;
 
@@ -44,8 +44,8 @@ public class Main {
         );
         Boiler boiler = new Boiler(
                 idGenerator.createID(),
-                BoilerState.OFF,
-                environment
+                BoilerState.OFF
+
         );
         Room room1 = new Room(
                 idGenerator.createID(),
@@ -54,8 +54,7 @@ public class Main {
                 false,
                 23,
                 18,
-                2,
-                environment
+                2
         );
 
         environment.setEpochTimer(epochTimer);
@@ -65,6 +64,9 @@ public class Main {
 
         BoilerDao boilerDao = new BoilerDao();
         boilerDao.save(boiler);
+        System.out.println();
+        var r = boilerDao.getAll();
+        var r2 = boilerDao.get(2);
         System.out.println();
     }
 }
