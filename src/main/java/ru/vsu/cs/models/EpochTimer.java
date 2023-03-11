@@ -2,11 +2,15 @@ package ru.vsu.cs.models;
 
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.DayOfWeek;
 
 
 @AllArgsConstructor
+@Getter
+@Setter
 public class EpochTimer {
     private int id;
     private int currTime;

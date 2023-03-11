@@ -4,9 +4,21 @@ import ru.vsu.cs.daos.Dao;
 import ru.vsu.cs.models.Boiler;
 import ru.vsu.cs.models.BoilerState;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 public abstract class CSVDao<T> extends CSVWorker implements Dao<T> {
+
+    public CSVDao() {
+        File f = new File(getFileName());
+        try {
+            f.createNewFile();
+        } catch (IOException e) {
+            System.out.println("err in file create");
+        }
+    }
+
     @Override
     public Optional<T> get(int id) {
         List<String[]> readData = readAllFile();
@@ -49,12 +61,32 @@ public abstract class CSVDao<T> extends CSVWorker implements Dao<T> {
 
     @Override
     public void update(T t) {
-        System.out.println("not implemented");
+        String[] csvRepr = toCSV(t);
+        List<String[]> readData = readAllFile();
+
+        for (int i = 0; i < readData.size(); i ++) {
+            if (compareCSVId(csvRepr, readData.get(i))) {
+                readData.set(i, csvRepr);
+            }
+        }
+        write(readData);
     }
 
     @Override
     public void delete(T t) {
-        System.out.println("not implemented");
+        int idxToDel = -1;
+        String[] csvRepr = toCSV(t);
+        List<String[]> readData = readAllFile();
+
+        for (int i = 0; i < readData.size(); i ++) {
+            if (compareCSVId(csvRepr, readData.get(i))) {
+                idxToDel = i;
+            }
+        }
+        if (idxToDel >= 0) {
+            readData.remove(idxToDel);
+            write(readData);
+        }
     }
 
     abstract protected T getFromCSV(String[] fields);

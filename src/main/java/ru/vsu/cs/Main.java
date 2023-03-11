@@ -1,6 +1,9 @@
 package ru.vsu.cs;
 
 import ru.vsu.cs.daos.DaoCsv.BoilerDao;
+import ru.vsu.cs.daos.DaoCsv.EnvironmentDao;
+import ru.vsu.cs.daos.DaoCsv.EpochTimerDao;
+import ru.vsu.cs.daos.DaoCsv.RoomDao;
 import ru.vsu.cs.models.*;
 import ru.vsu.cs.utils.IdGenerator;
 
@@ -60,13 +63,33 @@ public class Main {
         environment.setEpochTimer(epochTimer);
         environment.setBoiler(boiler);
         environment.addRoom(room1);
-        System.out.println();
+//        System.out.println();
+//
+//        BoilerDao boilerDao = new BoilerDao();
+//        boilerDao.save(boiler);
+//        System.out.println();
+//        var r = boilerDao.getAll();
+//        var r2 = boilerDao.get(2);
+//        System.out.println();
+//
+//        var r5 = r2.get();
+//        r5.setBoilerState(BoilerState.ON);
+//        boilerDao.update(r5);
+//
+//        var r7 = boilerDao.get(2);
+//
+//        boilerDao.delete(r2.get());
+//        var r3 = boilerDao.get(2);
+//        RoomDao roomDao = new RoomDao();
+//        roomDao.save(room1);
+//        Room r = roomDao.get(room1.getId()).get();
+        EnvironmentDao environmentDao = new EnvironmentDao(
+                new EpochTimerDao(),
+                new BoilerDao(),
+                new RoomDao()
+        );
+        environmentDao.save(environment);
 
-        BoilerDao boilerDao = new BoilerDao();
-        boilerDao.save(boiler);
-        System.out.println();
-        var r = boilerDao.getAll();
-        var r2 = boilerDao.get(2);
         System.out.println();
     }
 }
