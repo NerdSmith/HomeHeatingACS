@@ -18,7 +18,7 @@ public class EpochTimer {
     private final int DAY_CYCLE = 1000;
     private final int DAYS_IN_WEEK = 7;
 
-    public void incTime() {
+    public synchronized void incTime() {
         currTime = ++currTime % (DAY_CYCLE * DAYS_IN_WEEK);
     }
 

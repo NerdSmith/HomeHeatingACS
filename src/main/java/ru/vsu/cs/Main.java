@@ -59,10 +59,30 @@ public class Main {
                 18,
                 2
         );
-
         environment.setEpochTimer(epochTimer);
         environment.setBoiler(boiler);
         environment.addRoom(room1);
+
+
+
+        EpochTimerDao epochTimerDao = new EpochTimerDao();
+        RoomDao roomDao = new RoomDao();
+        BoilerDao boilerDao = new BoilerDao();
+
+        EnvironmentDao environmentDao = new EnvironmentDao(
+                epochTimerDao,
+                boilerDao,
+                roomDao
+        );
+        epochTimerDao.save(epochTimer);
+        boilerDao.save(boiler);
+        roomDao.save(room1);
+        environmentDao.save(environment);
+
+
+//        environment.setEpochTimer(epochTimer);
+//        environment.setBoiler(boiler);
+//        environment.addRoom(room1);
 //        System.out.println();
 //
 //        BoilerDao boilerDao = new BoilerDao();
@@ -83,12 +103,12 @@ public class Main {
 //        RoomDao roomDao = new RoomDao();
 //        roomDao.save(room1);
 //        Room r = roomDao.get(room1.getId()).get();
-        EnvironmentDao environmentDao = new EnvironmentDao(
-                new EpochTimerDao(),
-                new BoilerDao(),
-                new RoomDao()
-        );
-        environmentDao.save(environment);
+//        EnvironmentDao environmentDao = new EnvironmentDao(
+//                new EpochTimerDao(),
+//                new BoilerDao(),
+//                new RoomDao()
+//        );
+//        environmentDao.save(environment);
 
         System.out.println();
     }
