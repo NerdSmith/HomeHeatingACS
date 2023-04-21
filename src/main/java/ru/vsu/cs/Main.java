@@ -4,13 +4,13 @@ import ru.vsu.cs.daos.DaoCsv.BoilerDao;
 import ru.vsu.cs.daos.DaoCsv.EnvironmentDao;
 import ru.vsu.cs.daos.DaoCsv.EpochTimerDao;
 import ru.vsu.cs.daos.DaoCsv.RoomDao;
+import ru.vsu.cs.mappers.BoilerMapper;
 import ru.vsu.cs.models.*;
+import ru.vsu.cs.models.dtos.BoilerDto;
+import ru.vsu.cs.services.BoilerService;
 import ru.vsu.cs.utils.IdGenerator;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 class CustomTimer {
     private int period = 1000;
@@ -79,6 +79,13 @@ public class Main {
         roomDao.save(room1);
         environmentDao.save(environment);
 
+
+
+        BoilerService bs = new BoilerService(boilerDao, new BoilerMapper());
+        List<BoilerDto> boilerDaoList = bs.getAll();
+        for (var i: boilerDaoList) {
+            System.out.println(i.toString());
+        }
 
 //        environment.setEpochTimer(epochTimer);
 //        environment.setBoiler(boiler);
