@@ -1,5 +1,6 @@
 package ru.vsu.cs.daos.DaoCsv;
 
+import ru.vsu.cs.annotations.Autowired;
 import ru.vsu.cs.daos.Dao;
 import ru.vsu.cs.models.Boiler;
 import ru.vsu.cs.models.Environment;
@@ -15,19 +16,13 @@ import java.util.stream.Collectors;
 public class EnvironmentDao extends CSVDao<Environment> implements Dao<Environment> {
 
     private final String FILE_NAME = "environments.csv";
-    private final EpochTimerDao epochTimerDao;
-    private final BoilerDao boilerDao;
-    private final RoomDao roomDao;
+    @Autowired
+    private static EpochTimerDao epochTimerDao;
+    @Autowired
+    private static BoilerDao boilerDao;
+    @Autowired
+    private static RoomDao roomDao;
 
-    public EnvironmentDao(
-            EpochTimerDao epochTimerDao,
-            BoilerDao boilerDao,
-            RoomDao roomDao
-    ) {
-        this.epochTimerDao = epochTimerDao;
-        this.boilerDao = boilerDao;
-        this.roomDao = roomDao;
-    }
 
     @Override
     protected Environment getFromCSV(String[] fields) {
@@ -59,8 +54,8 @@ public class EnvironmentDao extends CSVDao<Environment> implements Dao<Environme
         return new String[] {
                 "" + item.getId(),
                 "" + item.getTemp(),
-                "" + item.getEpochTimer().getId(),
-                "" + item.getBoiler().getId(),
+                "" + (item.getEpochTimer() != null ? item.getEpochTimer().getId() : ""),
+                "" + (item.getBoiler() != null ? item.getBoiler().getId() : ""),
                 item.getRooms().stream().map(i -> String.valueOf(i.getId())).collect(Collectors.joining(" "))
         };
     }

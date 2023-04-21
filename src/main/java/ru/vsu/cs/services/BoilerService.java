@@ -1,6 +1,8 @@
 package ru.vsu.cs.services;
 
+import ru.vsu.cs.annotations.Autowired;
 import ru.vsu.cs.daos.Dao;
+import ru.vsu.cs.daos.DaoCsv.BoilerDao;
 import ru.vsu.cs.mappers.BoilerMapper;
 import ru.vsu.cs.mappers.Mapper;
 import ru.vsu.cs.models.Boiler;
@@ -10,11 +12,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class BoilerService extends CrudService<BoilerDto, Boiler> {
-
-    public BoilerService(Dao<Boiler> repository, Mapper<Boiler, BoilerDto> mapper) {
-        super(repository, mapper);
-    }
+public class BoilerService {
+    @Autowired
+    private static BoilerDao repository;
+    @Autowired
+    private static BoilerMapper mapper;
 
     public List<BoilerDto> getAll() {
         return repository.getAll().stream().map(mapper::toDTO).collect(Collectors.toList());
@@ -51,6 +53,4 @@ public class BoilerService extends CrudService<BoilerDto, Boiler> {
             repository.update(oldBoiler);
         }
     }
-
-
 }

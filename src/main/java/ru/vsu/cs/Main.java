@@ -1,5 +1,6 @@
 package ru.vsu.cs;
 
+import ru.vsu.cs.annotations.Autowired;
 import ru.vsu.cs.daos.DaoCsv.BoilerDao;
 import ru.vsu.cs.daos.DaoCsv.EnvironmentDao;
 import ru.vsu.cs.daos.DaoCsv.EpochTimerDao;
@@ -8,8 +9,10 @@ import ru.vsu.cs.mappers.BoilerMapper;
 import ru.vsu.cs.models.*;
 import ru.vsu.cs.models.dtos.BoilerDto;
 import ru.vsu.cs.services.BoilerService;
+import ru.vsu.cs.utils.DependencyInjector;
 import ru.vsu.cs.utils.IdGenerator;
 
+import java.net.URISyntaxException;
 import java.util.*;
 
 class CustomTimer {
@@ -31,8 +34,11 @@ class CustomTimer {
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 //        System.out.println("Hello world!");
+        DependencyInjector.inject();
+
+
         IdGenerator idGenerator = IdGenerator.getInstance();
         Environment environment = new Environment(
                 idGenerator.createID(),
@@ -69,11 +75,7 @@ public class Main {
         RoomDao roomDao = new RoomDao();
         BoilerDao boilerDao = new BoilerDao();
 
-        EnvironmentDao environmentDao = new EnvironmentDao(
-                epochTimerDao,
-                boilerDao,
-                roomDao
-        );
+        EnvironmentDao environmentDao = new EnvironmentDao();
         epochTimerDao.save(epochTimer);
         boilerDao.save(boiler);
         roomDao.save(room1);
@@ -81,16 +83,16 @@ public class Main {
 
 
 
-        BoilerService bs = new BoilerService(boilerDao, new BoilerMapper());
+        BoilerService bs = new BoilerService();
         List<BoilerDto> boilerDaoList = bs.getAll();
         for (var i: boilerDaoList) {
             System.out.println(i.toString());
         }
 
-//        environment.setEpochTimer(epochTimer);
-//        environment.setBoiler(boiler);
-//        environment.addRoom(room1);
-//        System.out.println();
+        environment.setEpochTimer(epochTimer);
+        environment.setBoiler(boiler);
+        environment.addRoom(room1);
+        System.out.println();
 //
 //        BoilerDao boilerDao = new BoilerDao();
 //        boilerDao.save(boiler);
