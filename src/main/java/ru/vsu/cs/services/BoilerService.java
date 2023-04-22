@@ -7,6 +7,7 @@ import ru.vsu.cs.mappers.BoilerMapper;
 import ru.vsu.cs.mappers.Mapper;
 import ru.vsu.cs.models.Boiler;
 import ru.vsu.cs.models.dtos.BoilerDto;
+import ru.vsu.cs.utils.IdGenerator;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,7 +44,9 @@ public class BoilerService {
     }
 
     public void saveNew(BoilerDto boilerDto) {
-        repository.save(mapper.toEntity(boilerDto));
+        Boiler i = mapper.toEntity(boilerDto);
+        i.setId(IdGenerator.getInstance().createID());
+        repository.save(i);
     }
 
     public void update(int id, BoilerDto boilerDto) {

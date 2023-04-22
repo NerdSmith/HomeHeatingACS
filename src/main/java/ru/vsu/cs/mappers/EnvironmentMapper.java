@@ -13,9 +13,11 @@ public class EnvironmentMapper implements Mapper<Environment, EnvironmentDto> {
         return new EnvironmentDto(
                 entity.getId(),
                 entity.getTemp(),
-                entity.getEpochTimer().getId(),
-                entity.getBoiler().getId(),
-                entity.getRooms().stream().map(Room::getId).collect(Collectors.toList())
+                entity.getEpochTimer() != null ? entity.getEpochTimer().getId() : -1,
+                entity.getBoiler() != null ? entity.getBoiler().getId() : -1,
+                entity.getRooms().size() != 0 ?
+                        entity.getRooms().stream().map(Room::getId).collect(Collectors.toList()) :
+                        new ArrayList<>()
         );
     }
 

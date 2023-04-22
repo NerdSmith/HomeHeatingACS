@@ -3,8 +3,10 @@ package ru.vsu.cs.services;
 import ru.vsu.cs.annotations.Autowired;
 import ru.vsu.cs.daos.DaoCsv.RoomDao;
 import ru.vsu.cs.mappers.RoomMapper;
+import ru.vsu.cs.models.EpochTimer;
 import ru.vsu.cs.models.Room;
 import ru.vsu.cs.models.dtos.RoomDto;
+import ru.vsu.cs.utils.IdGenerator;
 
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +43,9 @@ public class RoomService {
     }
 
     public void saveNew(RoomDto roomDto) {
-        repository.save(mapper.toEntity(roomDto));
+        Room i = mapper.toEntity(roomDto);
+        i.setId(IdGenerator.getInstance().createID());
+        repository.save(i);
     }
 
     public void update(int id, RoomDto roomDto) {

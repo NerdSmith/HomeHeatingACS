@@ -3,8 +3,10 @@ package ru.vsu.cs.services;
 import ru.vsu.cs.annotations.Autowired;
 import ru.vsu.cs.daos.DaoCsv.EpochTimerDao;
 import ru.vsu.cs.mappers.EpochTimerMapper;
+import ru.vsu.cs.models.Environment;
 import ru.vsu.cs.models.EpochTimer;
 import ru.vsu.cs.models.dtos.EpochTimerDto;
+import ru.vsu.cs.utils.IdGenerator;
 
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +43,9 @@ public class EpochTimerService {
     }
 
     public void saveNew(EpochTimerDto epochTimerDto) {
-        repository.save(mapper.toEntity(epochTimerDto));
+        EpochTimer i = mapper.toEntity(epochTimerDto);
+        i.setId(IdGenerator.getInstance().createID());
+        repository.save(i);
     }
 
     public void update(int id, EpochTimerDto epochTimerDto) {
