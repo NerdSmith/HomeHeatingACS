@@ -4,19 +4,33 @@ package ru.vsu.cs.models;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import ru.vsu.cs.annotations.Column;
+import ru.vsu.cs.annotations.ForeignKey;
+import ru.vsu.cs.annotations.Id;
 
 import java.time.DayOfWeek;
+
+import static ru.vsu.cs.utils.Constants.DAYS_IN_WEEK;
+import static ru.vsu.cs.utils.Constants.DAY_CYCLE;
 
 
 @AllArgsConstructor
 @Getter
 @Setter
-public class EpochTimer {
+public class EpochTimer implements Model {
+    @Id
     private int id;
+    @Column(name = "currTime")
     private int currTime;
 
-    private final int DAY_CYCLE = 1000;
-    private final int DAYS_IN_WEEK = 7;
+    public EpochTimer(int id, int currTime) {
+        this.id = id;
+        this.currTime = currTime;
+    }
+
+    @Column(name = "environment")
+    @ForeignKey(name = "environment_id", refTable = "environment")
+    private int environment;
 
     public synchronized void incTime() {
         currTime = ++currTime % (DAY_CYCLE * DAYS_IN_WEEK);

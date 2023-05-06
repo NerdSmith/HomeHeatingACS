@@ -1,10 +1,13 @@
 package ru.vsu.cs;
 
 import ru.vsu.cs.annotations.Autowired;
+import ru.vsu.cs.daos.BoilerRep;
 import ru.vsu.cs.daos.DaoCsv.BoilerDao;
 import ru.vsu.cs.daos.DaoCsv.EnvironmentDao;
 import ru.vsu.cs.daos.DaoCsv.EpochTimerDao;
 import ru.vsu.cs.daos.DaoCsv.RoomDao;
+import ru.vsu.cs.daos.EnvironmentRep;
+import ru.vsu.cs.daos.GenRep;
 import ru.vsu.cs.mappers.BoilerMapper;
 import ru.vsu.cs.models.*;
 import ru.vsu.cs.models.dtos.BoilerDto;
@@ -15,11 +18,10 @@ import ru.vsu.cs.services.BoilerService;
 import ru.vsu.cs.services.EnvironmentService;
 import ru.vsu.cs.services.EpochTimerService;
 import ru.vsu.cs.services.RoomService;
-import ru.vsu.cs.utils.DependencyInjector;
-import ru.vsu.cs.utils.IdGenerator;
-import ru.vsu.cs.utils.JsonSerializer;
+import ru.vsu.cs.utils.*;
 
 import java.net.URISyntaxException;
+import java.sql.Connection;
 import java.util.*;
 
 class CustomTimer {
@@ -40,39 +42,72 @@ class CustomTimer {
 }
 
 public class Main {
-    @Autowired
-    private static BoilerService boilerService;
-    @Autowired
-    private static EnvironmentService environmentService;
-    @Autowired
-    private static EpochTimerService epochTimerService;
-    @Autowired
-    private static RoomService roomService;
 
-
+//    @Autowired
+//    private static BoilerService boilerService;
+//    @Autowired
+//    private static EnvironmentService environmentService;
+//    @Autowired
+//    private static EpochTimerService epochTimerService;
+//    @Autowired
+//    private static RoomService roomService;
+//
+//
     public static void main(String[] args) throws Exception {
-//        System.out.println("Hello world!");
-        DependencyInjector.inject();
-        if (boilerService.getById(0) == null) {
-            boilerService.saveNew(new BoilerDto(0, 1));
-            roomService.saveNew(new RoomDto(0, 0, 100, false, 80, 50, 10));
-            epochTimerService.saveNew(new EpochTimerDto(0, 1000));
-            environmentService.saveNew(new EnvironmentDto(0, 30, 6, 0, List.of(1)));
-//            environmentService.saveNew(new EnvironmentDto(0, 30, 6, 15, List.of(1)));
-        }
+//        GenRep<Boiler> gr = new GenRep<>(Conn.getConn());
 
-        System.out.println("Boilers: ");
-        boilerService.getAll().stream().map(JsonSerializer::serialize).forEach(System.out::println);
-        System.out.println("---------");
-        System.out.println("Rooms: ");
-        roomService.getAll().stream().map(JsonSerializer::serialize).forEach(System.out::println);
-        System.out.println("---------");
-        System.out.println("EpochTimers: ");
-        epochTimerService.getAll().stream().map(JsonSerializer::serialize).forEach(System.out::println);
-        System.out.println("---------");
-        System.out.println("Environments: ");
-        environmentService.getAll().stream().map(JsonSerializer::serialize).forEach(System.out::println);
-        System.out.println("---------");
+//        TableCreator.createTable(Conn.getConn(), Environment.class);
+//        TableCreator.createTable(Conn.getConn(), Boiler.class);
+//        TableCreator.createTable(Conn.getConn(), EpochTimer.class);
+//        TableCreator.createTable(Conn.getConn(), Room.class);
+
+        EnvironmentRep environmentRep = new EnvironmentRep();
+//        BoilerRep boilerRep = new BoilerRep();
+        environmentRep.save(new Environment(
+                1,
+                20
+        ));
+        List<Environment> env = environmentRep.findAll();
+        for (var i : env) {
+            System.out.println(i);
+        }
+        System.out.println("------------");
+        environmentRep.delete(env.get(0).getId());
+        env = environmentRep.findAll();
+        for (var i : env) {
+            System.out.println(i);
+        }
+//        environmentRep.delete(1);
+//        boilerRep.save(new Boiler(
+//                1,
+//                BoilerState.ON,
+//                null
+//        ));
+//        TableCreator.createTable(Conn.getConn(), EpochTimer.class);
+//        TableCreator.createTable(Conn.getConn(), Room.class);
+//        gr.create();
+////        System.out.println("Hello world!");
+//        DependencyInjector.inject();
+//        if (boilerService.getById(0) == null) {
+//            boilerService.saveNew(new BoilerDto(0, 1));
+//            roomService.saveNew(new RoomDto(0, 0, 100, false, 80, 50, 10));
+//            epochTimerService.saveNew(new EpochTimerDto(0, 1000));
+//            environmentService.saveNew(new EnvironmentDto(0, 30, 6, 0, List.of(1)));
+////            environmentService.saveNew(new EnvironmentDto(0, 30, 6, 15, List.of(1)));
+//        }
+//
+//        System.out.println("Boilers: ");
+//        boilerService.getAll().stream().map(JsonSerializer::serialize).forEach(System.out::println);
+//        System.out.println("---------");
+//        System.out.println("Rooms: ");
+//        roomService.getAll().stream().map(JsonSerializer::serialize).forEach(System.out::println);
+//        System.out.println("---------");
+//        System.out.println("EpochTimers: ");
+//        epochTimerService.getAll().stream().map(JsonSerializer::serialize).forEach(System.out::println);
+//        System.out.println("---------");
+//        System.out.println("Environments: ");
+//        environmentService.getAll().stream().map(JsonSerializer::serialize).forEach(System.out::println);
+//        System.out.println("---------");
 //        IdGenerator idGenerator = IdGenerator.getInstance();
 //        Environment environment = new Environment(
 //                idGenerator.createID(),
