@@ -12,7 +12,7 @@ import java.util.List;
 public class EnvironmentDto {
     private int id;
     private int temp;
-    private int epochTimer;
-    private int boiler;
-    private List<Integer> rooms;
+//    private int epochTimer;
+//    private int boiler;
+//    private List<Integer> rooms;
 }

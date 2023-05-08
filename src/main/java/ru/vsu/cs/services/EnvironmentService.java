@@ -1,10 +1,14 @@
 package ru.vsu.cs.services;
 
 import ru.vsu.cs.annotations.Autowired;
+import ru.vsu.cs.daos.BoilerRep;
 import ru.vsu.cs.daos.DaoCsv.BoilerDao;
 import ru.vsu.cs.daos.DaoCsv.EnvironmentDao;
 import ru.vsu.cs.daos.DaoCsv.EpochTimerDao;
 import ru.vsu.cs.daos.DaoCsv.RoomDao;
+import ru.vsu.cs.daos.EnvironmentRep;
+import ru.vsu.cs.daos.EpochTimerRep;
+import ru.vsu.cs.daos.RoomRep;
 import ru.vsu.cs.mappers.EnvironmentMapper;
 import ru.vsu.cs.models.Boiler;
 import ru.vsu.cs.models.Environment;
@@ -17,13 +21,7 @@ import java.util.stream.Collectors;
 
 public class EnvironmentService {
     @Autowired
-    private static EnvironmentDao repository;
-    @Autowired
-    private static BoilerDao boilerRep;
-    @Autowired
-    private static RoomDao roomRep;
-    @Autowired
-    private static EpochTimerDao epochTimerRep;
+    private static EnvironmentRep repository;
     @Autowired
     private static EnvironmentMapper mapper;
 
@@ -51,21 +49,10 @@ public class EnvironmentService {
         }
     }
 
-    public void saveNew(EnvironmentDto environmentDto) {
+    public int saveNew(EnvironmentDto environmentDto) {
         Environment i = mapper.toEntity(environmentDto);
-        if (boilerRep.get(environmentDto.getBoiler()).isPresent()) {
-            i.setBoiler(boilerRep.get(environmentDto.getBoiler()).get());
-        }
-        if (epochTimerRep.get(environmentDto.getEpochTimer()).isPresent()) {
-            i.setEpochTimer(epochTimerRep.get(environmentDto.getEpochTimer()).get());
-        }
-        for (var r : environmentDto.getRooms()) {
-            if (roomRep.get(r).isPresent()) {
-                i.addRoom(roomRep.get(r).get());
-            }
-        }
         i.setId(IdGenerator.getInstance().createID());
-        repository.save(i);
+        return repository.save(i);
     }
 
 //    public void update(int id, EpochTimerDto epochTimerDto) {

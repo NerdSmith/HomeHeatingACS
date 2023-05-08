@@ -10,4 +10,5 @@ import lombok.Setter;
 public class EpochTimerDto {
     private int id;
     private int currTime;
+    private int environment;
 }

@@ -9,7 +9,8 @@ public class BoilerMapper implements Mapper<Boiler, BoilerDto> {
     public BoilerDto toDTO(Boiler entity) {
         return new BoilerDto(
                 entity.getId(),
-                entity.getBoilerState().getValue()
+                entity.getBoilerState().getValue(),
+                entity.getEnvironment()
         );
     }
 
@@ -17,7 +18,8 @@ public class BoilerMapper implements Mapper<Boiler, BoilerDto> {
     public Boiler toEntity(BoilerDto dto) {
         return new Boiler(
                 0,
-                BoilerState.from(dto.getBoilerState())
+                BoilerState.from(dto.getBoilerState()),
+                dto.getEnvironment()
         );
     }
 }

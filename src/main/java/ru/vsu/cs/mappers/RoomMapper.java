@@ -15,7 +15,8 @@ public class RoomMapper implements Mapper<Room, RoomDto> {
                 entity.isInfraredSensor(),
                 entity.getWorkingTemp(),
                 entity.getWaitingTemp(),
-                entity.getBatterySquare()
+                entity.getBatterySquare(),
+                entity.getEnvironment()
         );
     }
 
@@ -28,7 +29,8 @@ public class RoomMapper implements Mapper<Room, RoomDto> {
                 dto.isInfraredSensor(),
                 dto.getWorkingTemp(),
                 dto.getWaitingTemp(),
-                dto.getBatterySquare()
+                dto.getBatterySquare(),
+                dto.getEnvironment()
         );
     }
 }

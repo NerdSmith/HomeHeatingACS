@@ -4,13 +4,15 @@ package ru.vsu.cs.daos;
 import ru.vsu.cs.annotations.Column;
 import ru.vsu.cs.annotations.ForeignKey;
 import ru.vsu.cs.annotations.Id;
+import ru.vsu.cs.models.Model;
 
 import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public abstract class GenRep<T> {
+public abstract class GenRep<T> implements Dao<T> {
     private final Connection connection;
     private final Class<T> entityClass;
     private final String tableName;
@@ -21,19 +23,23 @@ public abstract class GenRep<T> {
         this.tableName = entityClass.getSimpleName().toLowerCase();
     }
 
-    public T findById(Integer id) throws SQLException {
+    @Override
+    public Optional<T> get(int id) {
         try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tableName + " WHERE id = ?")) {
             statement.setInt(1, id);
             try (ResultSet result = statement.executeQuery()) {
                 if (result.next()) {
-                    return mapResultSetToObject(result);
+                    return Optional.of(mapResultSetToObject(result));
                 }
-                return null;
+                return Optional.empty();
             }
+        } catch (SQLException e) {
+            return Optional.empty();
         }
     }
 
-    public List<T> findAll() throws SQLException {
+    @Override
+    public List<T> getAll() {
         try (Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery("SELECT * FROM " + tableName)) {
             List<T> entities = new ArrayList<>();
@@ -41,10 +47,13 @@ public abstract class GenRep<T> {
                 entities.add(mapResultSetToObject(result));
             }
             return entities;
+        } catch (SQLException e) {
+            return new ArrayList<>();
         }
     }
 
-    public void save(T entity) throws SQLException {
+    @Override
+    public int save(T entity) {
         String sql = generateInsertSql();
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             mapObjectToStatement(entity, statement);
@@ -54,19 +63,33 @@ public abstract class GenRep<T> {
                     mapGeneratedKeysToObject(entity, generatedKeys);
                 }
             }
+        } catch (SQLException e) {
+            return -1;
         }
+        return ((Model) entity).getId();
     }
 
-    public void update(T entity) throws SQLException {
+    @Override
+    public void update(T entity) {
         String sql = generateUpdateSql();
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             mapObjectToStatement(entity, statement);
             statement.setInt(getIdParameterIndex(), getIdFromObject(entity));
             statement.executeUpdate();
+        } catch (SQLException ignored) {
         }
     }
 
-    public void delete(Integer id) throws SQLException {
+    @Override
+    public void delete(T t) {
+        try {
+            delete(((Model) t).getId());
+        }
+        catch (SQLException ignored) {
+        }
+    }
+
+    public void delete(int id) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement("DELETE FROM " + tableName + " WHERE id = ?")) {
             statement.setInt(1, id);
             statement.executeUpdate();
@@ -78,6 +101,7 @@ public abstract class GenRep<T> {
     protected abstract void mapObjectToStatement(T entity, PreparedStatement statement) throws SQLException;
 
     protected void mapGeneratedKeysToObject(T entity, ResultSet generatedKeys) throws SQLException {
+        ((Model) entity).setId(generatedKeys.getInt(1));
     }
 
     protected String generateInsertSql() {

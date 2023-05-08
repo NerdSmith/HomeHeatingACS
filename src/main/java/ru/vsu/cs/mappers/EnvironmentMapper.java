@@ -12,12 +12,12 @@ public class EnvironmentMapper implements Mapper<Environment, EnvironmentDto> {
     public EnvironmentDto toDTO(Environment entity) {
         return new EnvironmentDto(
                 entity.getId(),
-                entity.getTemp(),
-                entity.getEpochTimer() != null ? entity.getEpochTimer().getId() : -1,
-                entity.getBoiler() != null ? entity.getBoiler().getId() : -1,
-                entity.getRooms().size() != 0 ?
-                        entity.getRooms().stream().map(Room::getId).collect(Collectors.toList()) :
-                        new ArrayList<>()
+                entity.getTemp()
+//                entity.getEpochTimer() != null ? entity.getEpochTimer().getId() : -1,
+//                entity.getBoiler() != null ? entity.getBoiler().getId() : -1,
+//                entity.getRooms().size() != 0 ?
+//                        entity.getRooms().stream().map(Room::getId).collect(Collectors.toList()) :
+//                        new ArrayList<>()
         );
     }
 
@@ -25,10 +25,10 @@ public class EnvironmentMapper implements Mapper<Environment, EnvironmentDto> {
     public Environment toEntity(EnvironmentDto dto) {
         return new Environment(
                 0,
-                dto.getTemp(),
-                null,
-                null,
-                new ArrayList<>()
+                dto.getTemp()
+//                null,
+//                null,
+//                new ArrayList<>()
         );
     }
 }

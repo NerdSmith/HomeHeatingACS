@@ -2,6 +2,7 @@ package ru.vsu.cs.services;
 
 import ru.vsu.cs.annotations.Autowired;
 import ru.vsu.cs.daos.DaoCsv.EpochTimerDao;
+import ru.vsu.cs.daos.EpochTimerRep;
 import ru.vsu.cs.mappers.EpochTimerMapper;
 import ru.vsu.cs.models.Environment;
 import ru.vsu.cs.models.EpochTimer;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class EpochTimerService {
     @Autowired
-    private static EpochTimerDao repository;
+    private static EpochTimerRep repository;
     @Autowired
     private static EpochTimerMapper mapper;
 
@@ -42,10 +43,10 @@ public class EpochTimerService {
         }
     }
 
-    public void saveNew(EpochTimerDto epochTimerDto) {
+    public int saveNew(EpochTimerDto epochTimerDto) {
         EpochTimer i = mapper.toEntity(epochTimerDto);
         i.setId(IdGenerator.getInstance().createID());
-        repository.save(i);
+        return repository.save(i);
     }
 
     public void update(int id, EpochTimerDto epochTimerDto) {

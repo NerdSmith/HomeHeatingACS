@@ -15,4 +15,5 @@ public class RoomDto {
     private int workingTemp;
     private int waitingTemp;
     private int batterySquare;
+    private int environment;
 }

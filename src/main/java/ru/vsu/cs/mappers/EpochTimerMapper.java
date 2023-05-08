@@ -10,7 +10,8 @@ public class EpochTimerMapper implements Mapper<EpochTimer, EpochTimerDto> {
     public EpochTimerDto toDTO(EpochTimer entity) {
         return new EpochTimerDto(
                 entity.getId(),
-                entity.getCurrTime()
+                entity.getCurrTime(),
+                entity.getEnvironment()
         );
     }
 
@@ -18,7 +19,8 @@ public class EpochTimerMapper implements Mapper<EpochTimer, EpochTimerDto> {
     public EpochTimer toEntity(EpochTimerDto dto) {
         return new EpochTimer(
                 0,
-                dto.getCurrTime()
+                dto.getCurrTime(),
+                dto.getEnvironment()
         );
     }
 }

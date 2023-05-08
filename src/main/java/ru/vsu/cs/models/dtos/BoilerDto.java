@@ -11,4 +11,5 @@ import ru.vsu.cs.models.BoilerState;
 public class BoilerDto {
     private int id;
     private int boilerState;
+    private int environment;
 }
