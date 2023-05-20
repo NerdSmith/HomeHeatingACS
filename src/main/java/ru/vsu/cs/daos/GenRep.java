@@ -74,9 +74,9 @@ public abstract class GenRep<T> implements Dao<T> {
         String sql = generateUpdateSql();
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             mapObjectToStatement(entity, statement);
-            statement.setInt(getIdParameterIndex(), getIdFromObject(entity));
+            statement.setInt(getIdParameterIndex4Update(), getIdFromObject(entity));
             statement.executeUpdate();
-        } catch (SQLException ignored) {
+        } catch (SQLException err) {
         }
     }
 
@@ -136,7 +136,7 @@ public abstract class GenRep<T> implements Dao<T> {
             if (field.isAnnotationPresent(Id.class)) {
                 continue;
             }
-            if (i > 0) {
+            if (i > 1) {
                 builder.append(", ");
             }
             builder.append(field.getName());
@@ -146,15 +146,19 @@ public abstract class GenRep<T> implements Dao<T> {
         return builder.toString();
     }
 
-    protected int getIdParameterIndex() {
+    protected int getIdParameterIndex4Update() {
         Field[] fields = entityClass.getDeclaredFields();
-        for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
-            if (field.isAnnotationPresent(Id.class)) {
-                return i + 1;
+        int counter = 0;
+        for (Field f : fields) {
+            if (
+                    f.isAnnotationPresent(Id.class) ||
+                    f.isAnnotationPresent(Column.class) ||
+                    f.isAnnotationPresent(ForeignKey.class)
+            ) {
+                counter += 1;
             }
         }
-        throw new IllegalArgumentException("Entity does not have @Id annotation");
+        return counter;
     }
 
     protected Integer getIdFromObject(T entity) {

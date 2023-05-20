@@ -12,6 +12,7 @@ import ru.vsu.cs.daos.RoomRep;
 import ru.vsu.cs.mappers.EnvironmentMapper;
 import ru.vsu.cs.models.Boiler;
 import ru.vsu.cs.models.Environment;
+import ru.vsu.cs.models.EpochTimer;
 import ru.vsu.cs.models.dtos.EnvironmentDto;
 import ru.vsu.cs.utils.IdGenerator;
 
@@ -55,11 +56,11 @@ public class EnvironmentService {
         return repository.save(i);
     }
 
-//    public void update(int id, EpochTimerDto epochTimerDto) {
-//        EpochTimer epochTimer = findById(id);
-//        if (epochTimer != null) {
-//            epochTimer.setCurrTime(mapper.toEntity(epochTimerDto).getCurrTime());
-//            repository.update(epochTimer);
-//        }
-//    }
+    public void update(int id, EnvironmentDto environmentDto) {
+        Environment oldEnv = findById(id);
+        if (oldEnv != null) {
+            oldEnv.setTemp(mapper.toEntity(environmentDto).getTemp());
+            repository.update(oldEnv);
+        }
+    }
 }

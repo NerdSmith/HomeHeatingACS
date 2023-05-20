@@ -1,7 +1,6 @@
 package ru.vsu.cs;
 
 import ru.vsu.cs.annotations.Autowired;
-import ru.vsu.cs.daos.EnvironmentRep;
 import ru.vsu.cs.models.*;
 import ru.vsu.cs.models.dtos.BoilerDto;
 import ru.vsu.cs.models.dtos.EnvironmentDto;
@@ -13,6 +12,7 @@ import ru.vsu.cs.services.EpochTimerService;
 import ru.vsu.cs.services.RoomService;
 import ru.vsu.cs.utils.Conn;
 import ru.vsu.cs.utils.DependencyInjector;
+import ru.vsu.cs.utils.JsonSerializer;
 import ru.vsu.cs.utils.TableCreator;
 
 import java.util.*;
@@ -81,6 +81,17 @@ public class Main {
                     newEnv
                     )
             );
+            roomService.saveNew(new RoomDto(
+                            0,
+                            0,
+                            80,
+                            true,
+                            70,
+                            40,
+                            8,
+                            newEnv
+                    )
+            );
             epochTimerService.saveNew(new EpochTimerDto(
                     0,
                     1000,
@@ -88,6 +99,9 @@ public class Main {
                     )
             );
         }
+
+        System.out.println(JsonSerializer.serialize(roomService.getAll()));
+
 //
 //        System.out.println("Boilers: ");
 //        boilerService.getAll().stream().map(JsonSerializer::serialize).forEach(System.out::println);
